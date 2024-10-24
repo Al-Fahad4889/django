@@ -1,0 +1,22 @@
+sqlitebrowser
+python3 manage.py makemigrations
+python3 manage.py migrate
+
+#advanced ORM Queries
+
+#task 2
+from your_app_name.models import Book  # Replace with your app name
+from django.utils import timezone
+from datetime import timedelta
+
+# Calculate the date 20 years ago
+twenty_years_ago = timezone.now() - timedelta(days=20 * 365)  # Rough approximation
+
+# Filter books published in the last 20 years
+recent_books = Book.objects.filter(publicationdate__gte=twenty_years_ago)
+#or 
+recent_books = Book.objects.filter(publicationdate__gte=date.today()-timedelta(days=15*365))
+
+# Display the results
+for book in recent_books:
+    print(f"Title: {book.title}, Published: {book.publicationdate}, Price: {book.price}")
