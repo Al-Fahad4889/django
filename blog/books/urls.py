@@ -2,7 +2,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from django.shortcuts import render 
 from books.views import my_view, MyView, BookListView, ContactFormView 
- 
+from .views import BookListCreate
  
 urlpatterns = [ 
     path("initial/", my_view), 
@@ -13,4 +13,6 @@ urlpatterns = [
     path("book_form/", lambda request: render(request, "success/book_form.html"), name="book_form"),
     path('login/', auth_views.LoginView.as_view(template_name='login_view.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('rest_books/', BookListCreate.as_view(), name='rest'),
+    
 ]
