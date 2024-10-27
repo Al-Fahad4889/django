@@ -22,4 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('hello/', views.hello_django, name='hello_django'),
     path('books/', include('books.urls')),
+    path('user/', include('user.urls')),
+    path('admin/', admin.site.urls),
 ]
