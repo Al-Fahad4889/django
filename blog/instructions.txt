@@ -20,3 +20,9 @@ recent_books = Book.objects.filter(publicationdate__gte=date.today()-timedelta(d
 # Display the results
 for book in recent_books:
     print(f"Title: {book.title}, Published: {book.publicationdate}, Price: {book.price}")
+
+#notes
+title should be under 100 char
+description must have 10 words
+publication date must 1 month old
+price min 100, max 10000
