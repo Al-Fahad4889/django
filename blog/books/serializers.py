@@ -1,17 +1,37 @@
 from rest_framework import serializers
 from .models import Book,Author,Publisher
 from datetime import datetime,timedelta
+
+
+class AuthorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Author
+        fields = '__all__'  # You can also specify specific fields as a list
+
+
+class PublisherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Publisher
+        fields = '__all__'
+
+
 class BookSerializer(serializers.ModelSerializer):
+    author = serializers.PrimaryKeyRelatedField(queryset=Author.objects.all())
+    publisher = serializers.PrimaryKeyRelatedField(queryset=Publisher.objects.all())
+    
+    author_details = AuthorSerializer(source='author', read_only=True)
+    publisher_details = PublisherSerializer(source='publisher', read_only=True)
     class Meta:
         model = Book
         fields = '__all__'
     def validate(self, attrs):
+        title = attrs.get("title")
         description = attrs.get("description")
         publication_date = attrs.get("publication_date")
         price = attrs.get("price")
 
         # Validate title: Must be under 100 characters
-        if attrs.get("title") and len(attrs["title"]) > 100:
+        if title and len(attrs["title"]) > 100:
             raise serializers.ValidationError("Title cannot exceed 100 characters.")
 
         # Validate description: Must have at least 10 words
@@ -29,13 +49,3 @@ class BookSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Price must be between 100 and 10,000.")
 
         return attrs
-
-class AuthorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Author
-        fields = '__all__'  # You can also specify specific fields as a list
-
-class PublisherSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Publisher
-        fields = '__all__'
