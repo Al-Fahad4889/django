@@ -6,4 +6,4 @@ class Product(models.Model):
     description = models.TextField(null=True, blank=True) 
     publication_date = models.DateField(null=True, blank=True) 
     price = models.DecimalField(default=0, max_digits=10, decimal_places=2) 
-    
+     
