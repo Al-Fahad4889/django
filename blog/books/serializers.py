@@ -1,3 +1,4 @@
+from django.utils import timezone
 from rest_framework import serializers
 from .models import Book,Author,Publisher
 from datetime import datetime,timedelta
@@ -49,3 +50,24 @@ class BookSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Price must be between 100 and 10,000.")
 
         return attrs
+
+def create(self, validated_data):
+    author = validated_data.pop('author')
+    author_serializer = AuthorSerializer(data=author)
+    if author_serializer.is_valid():
+        author_instance = author_serializer.save()
+        validated_data["author"] = author_instance
+
+    publisher = validated_data.pop('publisher')
+    publisher_serializer = PublisherSerializer(data=publisher)
+    if publisher_serializer.is_valid():
+        publisher_instance = publisher_serializer.save()
+        validated_data["publisher"] = publisher_instance
+
+    return super().create(validated_data)
+
+def update(self, instance, validated_data):
+    validated_data["updated_at"] = timezone.now()
+
+    return super().update(instance, validated_data)
+
